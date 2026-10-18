@@ -8,7 +8,7 @@ dotenv.config();
 let pool: Pool | null = null;
 
 //create an instance of pool connection
-export function getPool() {
+export function getPool(): Pool {
   if (!pool) {
     const connectionString = process.env.DATABASE_URL;
     if (!connectionString) {

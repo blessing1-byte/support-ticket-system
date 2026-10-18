@@ -14,3 +14,6 @@ export { validateBody } from "./validation/validateBody";
 
 //response
 export { failResponse, successResponse } from "./response/response";
+
+//db
+export { closePool, getPool } from "./db/pool";
