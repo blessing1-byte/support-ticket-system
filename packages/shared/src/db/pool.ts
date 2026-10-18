@@ -23,7 +23,7 @@ export function getPool(): Pool {
 //close connection
 export async function closePool() {
   if (pool) {
-    await pool.end;
+    await pool.end();
     pool = null;
   }
 }
