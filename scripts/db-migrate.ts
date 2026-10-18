@@ -9,7 +9,7 @@ async function main() {
   try {
     //sql file to run
     //get the content
-    const file = process.argv[2] || "001_users.sql";
+    const file = process.argv[2] || "sql/001_users.sql";
 
     //read the data in the sql and perform query to create table
     //read the content
