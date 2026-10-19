@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "db-migrate": "tsx scripts/db-migrate.ts",
-    "dev:auth": "npm run dev -w user-service"
+    "dev:auth": "npm run dev -w auth-service"
   },
   "repository": {
     "type": "git",
