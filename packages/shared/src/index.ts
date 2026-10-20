@@ -17,3 +17,6 @@ export { failResponse, successResponse } from "./response/response";
 
 //db
 export { closePool, getPool } from "./db/pool";
+
+//
+export { signToken } from "./auth/jwt";

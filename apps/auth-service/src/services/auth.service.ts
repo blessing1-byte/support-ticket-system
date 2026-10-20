@@ -3,6 +3,7 @@ import * as userRepo from "../repositories/user.repository";
 import { AppError, logger } from "shared";
 import bcrypt from "bcryptjs";
 import { convertToPublicUser } from "../utils/auth.utils";
+import { signToken } from "shared";
 
 const salt = bcrypt.genSaltSync(10);
 export async function register(input: RegisterInput) {
@@ -43,5 +44,8 @@ export async function login(input: LoginInput) {
   }
 
   //sign a token and also return user data along with th signed token
-  return { user: convertToPublicUser(existingUser) };
+
+  const token = signToken({ userId: existingUser.id, role: existingUser.role });
+
+  return { token, user: convertToPublicUser(existingUser) };
 }

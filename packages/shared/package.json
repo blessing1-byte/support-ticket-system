@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "dotenv": "^18.0.8",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.23.1",
     "pino": "^10.4.0",
     "pino-http": "^11.0.0",
