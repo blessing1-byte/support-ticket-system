@@ -18,5 +18,8 @@ export { failResponse, successResponse } from "./response/response";
 //db
 export { closePool, getPool } from "./db/pool";
 
-//
-export { signToken } from "./auth/jwt";
+//token
+export { signToken, verifyToken } from "./auth/jwt";
+
+//userRole
+export type { UserRole } from "./auth/types";

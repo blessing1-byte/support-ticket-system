@@ -20,5 +20,9 @@
     "url": "https://github.com/blessing1-byte/support-ticket-system/issues"
   },
   "homepage": "https://github.com/blessing1-byte/support-ticket-system#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.3.0",
+    "shared": "^1.0.0"
+  }
 }
