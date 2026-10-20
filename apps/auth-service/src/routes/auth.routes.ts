@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateBody } from "shared";
-import { registerSchema } from "../schema/auth.schema";
+import { loginSchema, registerSchema } from "../schema/auth.schema";
 import * as authController from "../controllers/auth.controller";
 const authRouter = Router();
 
@@ -9,5 +9,8 @@ authRouter.post(
   validateBody(registerSchema),
   authController.register,
 );
+
+//login user
+authRouter.post("/login", validateBody(loginSchema), authController.login);
 
 export default authRouter;

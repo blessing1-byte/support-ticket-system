@@ -14,3 +14,12 @@ export async function register(
     next(error);
   }
 }
+
+export async function login(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = await userService.login(req.body);
+    successResponse(res, 201, { user });
+  } catch (error) {
+    next(error);
+  }
+}

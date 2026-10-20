@@ -19,6 +19,15 @@ export const registerSchema = z.object({
   // ),
 });
 
+export const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "valid email is required")
+    .regex(emailRegex, "Please enter a valid email address format"),
+  password: z.string().min(6, "password is not up to 6 characters"),
+});
+
 export type RegisterInput = z.infer<typeof registerSchema>;
+export type LoginInput = z.infer<typeof loginSchema>;
 
 //strict rules that every input should follow

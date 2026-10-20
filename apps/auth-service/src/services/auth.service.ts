@@ -1,4 +1,4 @@
-import { RegisterInput } from "../schema/auth.schema";
+import { LoginInput, RegisterInput } from "../schema/auth.schema";
 import * as userRepo from "../repositories/user.repository";
 import { AppError, logger } from "shared";
 import bcrypt from "bcryptjs";
@@ -24,4 +24,24 @@ export async function register(input: RegisterInput) {
   logger.info("user created successfully");
 
   return convertToPublicUser(newUser);
+}
+
+//user logins in
+//authGateway runs
+//finds user and return
+export async function login(input: LoginInput) {
+  const existingUser = await userRepo.findUserByEmail(input.email);
+  if (!existingUser) {
+    throw new AppError(404, "invalid email or password");
+  }
+  const validPassword = bcrypt.compare(
+    input.password,
+    existingUser.password_hash,
+  );
+  if (!validPassword) {
+    throw new AppError(404, "invalid email or password");
+  }
+
+  //sign a token and also return user data along with th signed token
+  return { user: convertToPublicUser(existingUser) };
 }
