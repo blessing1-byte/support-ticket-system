@@ -4,7 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { AppError } from "../errors/AppError";
 config({ path: resolve(process.cwd(), "../../../../.env") });
 
-export function requireGatewaySecret(
+export function verifyGatewaySecret(
   req: Request,
   res: Response,
   next: NextFunction,
