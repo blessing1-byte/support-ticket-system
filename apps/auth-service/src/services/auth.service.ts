@@ -33,9 +33,9 @@ export async function register(input: RegisterInput) {
 export async function login(input: LoginInput) {
   const existingUser = await userRepo.findUserByEmail(input.email);
   if (!existingUser) {
-    throw new AppError(404, "invalid email or password");
+    throw new AppError(401, "invalid email or password");
   }
-  const validPassword = bcrypt.compare(
+  const validPassword = await bcrypt.compare(
     input.password,
     existingUser.password_hash,
   );

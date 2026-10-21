@@ -1,7 +1,13 @@
 import e from "express";
 import dotenv from "dotenv";
 import { resolve } from "node:path";
-import { errorHandler, httpLogger, logger, successResponse } from "shared";
+import {
+  errorHandler,
+  httpLogger,
+  logger,
+  successResponse,
+  verifyGatewaySecret,
+} from "shared";
 import authRouter from "./routes/auth.routes";
 
 dotenv.config({ path: resolve(process.cwd(), "../../../.env") });
@@ -20,10 +26,11 @@ app.get("/health", (_req, res) => {
   });
 });
 //set up routes
+// app.use("/api/auth", verifyGatewaySecret, authRouter);
 app.use("/api/auth", authRouter);
 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-  logger.info("app is running on port 4001");
+  logger.info("auth is running on port 4001");
 });

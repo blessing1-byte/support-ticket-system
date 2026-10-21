@@ -1,8 +1,8 @@
 import { UserRole } from "shared";
 // define public route
 export const PublicRoute = [
-  { method: "POST", path: "api/auth/register" },
-  { method: "POST", path: "api/auth/login" },
+  { method: "POST", path: "/api/auth/register" },
+  { method: "POST", path: "/api/auth/login" },
 ] as const;
 //define rbac rule type
 export type RbacRule = {

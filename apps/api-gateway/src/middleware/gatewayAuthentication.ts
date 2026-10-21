@@ -46,6 +46,10 @@ export function gatewayAuth(req: Request, res: Response, next: NextFunction) {
     //check if its public route
     const normalizedPath = NormalizeRequestPath(req);
 
+    //debugger check
+    console.log(
+      `[Gateway] Method: ${req.method}, Path: ${normalizedPath}, IsPublic: ${isPublicRoute(req.method, normalizedPath)}`,
+    );
     if (isPublicRoute(req.method, normalizedPath)) {
       return next();
     }
@@ -79,7 +83,7 @@ export function gatewayAuth(req: Request, res: Response, next: NextFunction) {
     if (error instanceof AppError) {
       return next(error);
     }
-    return new AppError(401, "invalid or expired Token");
+    return next(new AppError(401, "invalid or expired Token"));
   }
 }
 

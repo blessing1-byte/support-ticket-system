@@ -20,9 +20,13 @@ export async function registerUser(input: {
 //find user by email
 export async function findUserByEmail(email: string): Promise<User | null> {
   const result = await pool.query(
-    `SELECT id, name, email, role, is_active, created_at,updated_at from users WHERE email= $1
+    `SELECT id, name, email, role, is_active,password_hash,created_at,updated_at from users WHERE email= $1
     `,
     [email],
   );
   return result.rows[0] ?? null;
 }
+
+//find user by id: /api/auth/me
+
+//update user profile

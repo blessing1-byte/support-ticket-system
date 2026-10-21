@@ -23,3 +23,9 @@ export { signToken, verifyToken } from "./auth/jwt";
 
 //userRole
 export type { UserRole } from "./auth/types";
+
+//verify gateway secret
+export { verifyGatewaySecret } from "./auth/gatewaySecretAuth";
+
+//require Identity
+export { requireIdentity } from "./util/requireIdentity";

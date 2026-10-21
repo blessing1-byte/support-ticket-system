@@ -11,12 +11,12 @@ export function verifyGatewaySecret(
 ) {
   const expectedSecret = process.env.GATEWAY_SECRET;
   if (!expectedSecret) {
-    return next(new AppError(500, "gateway secret was not set"));
+    return next(new Error("gateway secret was not set"));
   }
 
   const incomingSecret = req.header("x-gateway-secret");
-  if (!incomingSecret || incomingSecret != expectedSecret) {
-    return next(new AppError(403, "forbidden"));
+  if (!incomingSecret || incomingSecret !== expectedSecret) {
+    return next(new Error("forbidden"));
   }
   next();
 }
