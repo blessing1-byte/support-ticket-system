@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validateBody } from "shared";
 import { loginSchema, registerSchema } from "../schema/auth.schema";
 import * as authController from "../controllers/auth.controller";
+import { requireAdmin } from "../middleware/adminAuthorization";
 const authRouter = Router();
 
 authRouter.post(
@@ -12,5 +13,17 @@ authRouter.post(
 
 //login user
 authRouter.post("/login", validateBody(loginSchema), authController.login);
+
+//findById
+authRouter.get("/me", authController.findUserById);
+
+//agent
+//create agent
+authRouter.post(
+  "/create-agent",
+  validateBody(registerSchema),
+  requireAdmin,
+  authController.createAgent,
+);
 
 export default authRouter;

@@ -54,12 +54,17 @@ export function gatewayAuth(req: Request, res: Response, next: NextFunction) {
       return next();
     }
 
-    const authHeader = req.header("authorization");
+    const authHeader = req.header("Authorization");
+
     if (!authHeader?.startsWith("Bearer ")) {
       throw new AppError(401, "missing or Invalid authentication header");
     }
+
+    //slice out the bearer text to extract the token
+    const token = authHeader.slice(7);
+
     //verifying a token returns the payload
-    const payload = verifyToken(authHeader);
+    const payload = verifyToken(token);
 
     //check for allowed roles
     const allowedRoles = getAllowedRoles(req.method, normalizedPath);

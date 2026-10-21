@@ -28,5 +28,13 @@ export async function findUserByEmail(email: string): Promise<User | null> {
 }
 
 //find user by id: /api/auth/me
+export async function findUserById(id: string): Promise<User | null> {
+  const result = await pool.query(
+    `SELECT id, name, email, role, is_active,password_hash,created_at,updated_at from users WHERE id= $1
+    `,
+    [id],
+  );
+  return result.rows[0] ?? null;
+}
 
 //update user profile

@@ -6,7 +6,6 @@ import { JwtPayload } from "./types";
 import { config } from "dotenv";
 import { AppError } from "../errors/AppError";
 import jwt from "jsonwebtoken";
-import { object } from "zod";
 
 config({ path: resolve(process.cwd(), "../../../.env") });
 
@@ -19,10 +18,10 @@ function extractSecret() {
 }
 
 export function signToken(payload: JwtPayload): string {
-  const expireIn = process.env.JWT_EXPIRE_IN;
+  const expiresIn = process.env.JWT_EXPIRES_IN;
 
   return jwt.sign(payload, extractSecret(), {
-    expiresIn: expireIn as jwt.SignOptions["expiresIn"],
+    expiresIn: expiresIn as jwt.SignOptions["expiresIn"],
   });
 }
 
@@ -34,7 +33,8 @@ export function verifyToken(token: string): JwtPayload {
   //if token is not returned as an object or is null or id is not string, or role does not include any from the allowed roles
   if (
     decodeToken === null ||
-    decodeToken != object ||
+    typeof decodeToken !== "object" ||
+    typeof decodeToken.userId !== "string" ||
     !allowedRoles.includes(decodeToken.role)
   ) {
     throw new Error("invalid auth token");

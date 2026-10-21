@@ -15,6 +15,11 @@ export type RbacRule = {
 const roleBasedRoutes: RbacRule[] = [
   {
     method: "POST",
+    path: "/api/auth/create-agent",
+    role: ["ADMIN"],
+  },
+  {
+    method: "GET",
     path: "/api/auth/me",
     role: ["CUSTOMER", "ADMIN"],
   },

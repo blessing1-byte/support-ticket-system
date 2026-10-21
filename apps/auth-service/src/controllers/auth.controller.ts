@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as userService from "../services/auth.service";
-import { successResponse } from "shared";
+import { requireIdentity, successResponse } from "shared";
 import * as adminService from "../services/admin.service";
 
 export async function register(
@@ -25,16 +25,32 @@ export async function login(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+//find by id
+export async function findUserById(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { userId, role } = requireIdentity(req);
+
+    const user = await userService.findUserById(userId, role);
+    successResponse(res, 200, { user });
+  } catch (error) {
+    next(error);
+  }
+}
+
 //agent controller
-// export async function createAgent(
-//   req: Request,
-//   res: Response,
-//   next: NextFunction,
-// ) {
-//   try {
-//     const agent = await adminService.createAgent(req.body);
-//     successResponse(res, 201, { agent });
-//   } catch (error) {
-//     next(error);
-//   }
-// }
+export async function createAgent(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const agent = await adminService.createAgent(req.body);
+    return successResponse(res, 201, { agent });
+  } catch (error) {
+    return next(error);
+  }
+}

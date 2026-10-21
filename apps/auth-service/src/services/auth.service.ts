@@ -49,3 +49,19 @@ export async function login(input: LoginInput) {
 
   return { token, user: convertToPublicUser(existingUser) };
 }
+
+// find by id
+export async function findUserById(id: string, role: string) {
+  const user = await userRepo.findUserById(id);
+  if (!user) {
+    throw new AppError(401, "user does not exist");
+  }
+  if (user.role !== role && user.role !== "ADMIN") {
+    throw new AppError(
+      401,
+      "you do no have the permission to perform this action.",
+    );
+  }
+
+  return convertToPublicUser(user);
+}

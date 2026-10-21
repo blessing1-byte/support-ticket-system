@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { AppError } from "../src";
+import { AppError } from "../errors/AppError";
 
 export function requireIdentity(req: Request) {
-  const userId = req.header("x-user-id");
+  const userId = req.header("x-userId");
   const role = req.header("x-role");
 
   if (!userId || !role) {
