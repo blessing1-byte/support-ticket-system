@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { validateBody } from "shared";
-import { loginSchema, registerSchema } from "../schema/auth.schema";
+import {
+  loginSchema,
+  registerSchema,
+  updatePasswordSchema,
+} from "../schema/auth.schema";
 import * as authController from "../controllers/auth.controller";
 import { requireAdmin } from "../middleware/adminAuthorization";
 const authRouter = Router();
@@ -24,6 +28,12 @@ authRouter.post(
   validateBody(registerSchema),
   requireAdmin,
   authController.createAgent,
+);
+
+authRouter.post(
+  "/me/update-password",
+  validateBody(updatePasswordSchema),
+  authController.updatePassword,
 );
 
 export default authRouter;

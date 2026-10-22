@@ -65,3 +65,43 @@ export async function findUserById(id: string, role: string) {
 
   return convertToPublicUser(user);
 }
+
+//update password
+export async function updatePassword(
+  input: {
+    email: string;
+    oldPassword: string;
+    newPassword: string;
+  },
+  userId: string,
+  role: string,
+) {
+  const user = await userRepo.findUserByEmail(input.email);
+  if (!user) {
+    throw new AppError(409, "user not found");
+  }
+
+  if (user.id !== userId && user.role !== role) {
+    throw new AppError(403, "you do not have rights to update your password.");
+  }
+
+  const validPassword = await bcrypt.compare(
+    input.oldPassword,
+    user.password_hash,
+  );
+
+  if (!validPassword) {
+    throw new AppError(401, "the password you entered is incorrect");
+  }
+
+  const hashedNewPassword = bcrypt.hash(input.newPassword, salt);
+
+  const updated = await userRepo.updatePassword({
+    id: userId,
+    newPassword: hashedNewPassword,
+  });
+
+  if (!updated) {
+    throw new Error("an error occurred. failed to update password");
+  }
+}

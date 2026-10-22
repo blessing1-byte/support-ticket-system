@@ -23,6 +23,11 @@ const roleBasedRoutes: RbacRule[] = [
     path: "/api/auth/me",
     role: ["CUSTOMER", "ADMIN"],
   },
+  {
+    method: "POST",
+    path: "/api/auth/me/update-password",
+    role: ["CUSTOMER"],
+  },
 ];
 
 //helper function

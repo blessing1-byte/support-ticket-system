@@ -37,4 +37,31 @@ export async function findUserById(id: string): Promise<User | null> {
   return result.rows[0] ?? null;
 }
 
-//update user profile
+//update user profile: strictly the customer
+//should user be allowed to update password on here or run forgot password separately.
+// export async function updateUser(input:{
+//     name: string,
+//     email: string,
+//     password: string
+// }): Promise<User>{
+
+// }
+
+//update user status: admin and agent
+
+//users should have a right to reopen a closed ticket
+
+//update password
+//user is authenticated from his token to know if he is the owner of that account. user types his password. it is verified against existing password
+export async function updatePassword(input: {
+  id: string;
+  newPassword: Promise<string>;
+}): Promise<Boolean> {
+  const result = await pool.query(
+    `
+    UPDATE users SET password_hash = $1, updated_at = NOW() where id = $3
+    `,
+    [input.newPassword, input.id],
+  );
+  return (result.rowCount ?? 0) > 0;
+}

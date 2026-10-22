@@ -41,6 +41,22 @@ export async function findUserById(
   }
 }
 
+//update password
+export async function updatePassword(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { userId, role } = requireIdentity(req);
+
+    const updated = await userService.updatePassword(req.body, userId, role);
+    successResponse(res, 204, { message: "password updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
 //agent controller
 export async function createAgent(
   req: Request,
