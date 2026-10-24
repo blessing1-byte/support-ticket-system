@@ -33,11 +33,18 @@ export type LoginInput = z.infer<typeof loginSchema>;
 //strict rules that every input should follow
 
 export const updatePasswordSchema = z.object({
+  oldPassword: z.string().min(6, "password is not up to 6 characters"),
+  newPassword: z.string().min(6, "password is not up to 6 characters"),
+});
+
+export type UpdatePasswordInput = z.infer<typeof updatePasswordSchema>;
+
+export const updateUserSchema = z.object({
+  name: z.string().min(1, "name is required"),
   email: z
     .string()
     .min(1, "valid email is required")
     .regex(emailRegex, "Please enter a valid email address format"),
-  password: z.string().min(6, "password is not up to 6 characters"),
 });
 
-export type updatePasswordInput = z.infer<typeof loginSchema>;
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;

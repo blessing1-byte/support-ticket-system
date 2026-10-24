@@ -8,7 +8,8 @@
   "scripts": {
     "db-migrate": "tsx scripts/db-migrate.ts",
     "dev:auth": "npm run dev -w auth-service",
-    "dev:gateway": "npm run dev -w api-gateway"
+    "dev:gateway": "npm run dev -w api-gateway",
+    "dev:tickets": "npm run dev -w tickets-service"
   },
   "repository": {
     "type": "git",

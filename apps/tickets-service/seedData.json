@@ -1,0 +1,37 @@
+[
+  {
+    "subject": "Unable to log in",
+    "description": "I enter my email and password, but the system keeps rejecting my login.",
+    "category": "ACCOUNT",
+    "priority": "HIGH",
+    "status": "OPEN"
+  },
+  {
+    "subject": "Payment failed",
+    "description": "My payment failed, but the amount was deducted from my account.",
+    "category": "PAYMENT",
+    "priority": "HIGH",
+    "status": "OPEN"
+  },
+  {
+    "subject": "Application loading slowly",
+    "description": "The dashboard takes too long to load after logging in.",
+    "category": "TECHNICAL",
+    "priority": "MEDIUM",
+    "status": "IN PROGRESS"
+  },
+  {
+    "subject": "Unable to update profile",
+    "description": "I cannot find the option to update my profile information.",
+    "category": "GENERAL",
+    "priority": "LOW",
+    "status": "OPEN"
+  },
+  {
+    "subject": "Account locked",
+    "description": "My account was locked after several unsuccessful login attempts.",
+    "category": "ACCOUNT",
+    "priority": "HIGH",
+    "status": "RESOLVED"
+  }
+]

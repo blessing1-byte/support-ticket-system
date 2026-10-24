@@ -1,4 +1,9 @@
-import { LoginInput, RegisterInput } from "../schema/auth.schema";
+import {
+  LoginInput,
+  RegisterInput,
+  UpdatePasswordInput,
+  UpdateUserInput,
+} from "../schema/auth.schema";
 import * as userRepo from "../repositories/user.repository";
 import { AppError, logger } from "shared";
 import bcrypt from "bcryptjs";
@@ -68,20 +73,16 @@ export async function findUserById(id: string, role: string) {
 
 //update password
 export async function updatePassword(
-  input: {
-    email: string;
-    oldPassword: string;
-    newPassword: string;
-  },
+  input: UpdatePasswordInput,
   userId: string,
   role: string,
 ) {
-  const user = await userRepo.findUserByEmail(input.email);
+  const user = await userRepo.findUserById(userId);
   if (!user) {
     throw new AppError(409, "user not found");
   }
 
-  if (user.id !== userId && user.role !== role) {
+  if (user.role !== role) {
     throw new AppError(403, "you do not have rights to update your password.");
   }
 
@@ -94,7 +95,7 @@ export async function updatePassword(
     throw new AppError(401, "the password you entered is incorrect");
   }
 
-  const hashedNewPassword = bcrypt.hash(input.newPassword, salt);
+  const hashedNewPassword = await bcrypt.hash(input.newPassword, salt);
 
   const updated = await userRepo.updatePassword({
     id: userId,
@@ -103,5 +104,32 @@ export async function updatePassword(
 
   if (!updated) {
     throw new Error("an error occurred. failed to update password");
+  }
+}
+
+//update user details
+export async function updateUser(
+  input: UpdateUserInput,
+  userId: string,
+  role: string,
+) {
+  const user = await userRepo.findUserById(userId);
+  if (!user) {
+    throw new AppError(409, "user does not exist");
+  }
+  if (user.role != role) {
+    throw new AppError(
+      401,
+      "you do not have the permission to update user profile",
+    );
+  }
+
+  const updated = await userRepo.updateUser({
+    name: user.name ?? input.name,
+    email: user.email ?? input.email,
+    id: userId,
+  });
+  if (!updated) {
+    throw new Error("failed to update user details");
   }
 }

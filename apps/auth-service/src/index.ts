@@ -27,7 +27,7 @@ app.get("/health", (_req, res) => {
 });
 //set up routes
 // app.use("/api/auth", verifyGatewaySecret, authRouter);
-app.use("/api/auth", authRouter);
+app.use("/api/auth", verifyGatewaySecret, authRouter);
 
 app.use(errorHandler);
 

@@ -55,13 +55,25 @@ export async function findUserById(id: string): Promise<User | null> {
 //user is authenticated from his token to know if he is the owner of that account. user types his password. it is verified against existing password
 export async function updatePassword(input: {
   id: string;
-  newPassword: Promise<string>;
+  newPassword: string;
 }): Promise<Boolean> {
   const result = await pool.query(
     `
-    UPDATE users SET password_hash = $1, updated_at = NOW() where id = $3
+    UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2
     `,
     [input.newPassword, input.id],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
+export async function updateUser(input: {
+  name: string;
+  email: string;
+  id: string;
+}): Promise<Boolean> {
+  const result = await pool.query(
+    `UPDATE users SET name =$1, email =$2, updated_at = NOW() WHERE id = $3`,
+    [input.name, input.email, input.id],
   );
   return (result.rowCount ?? 0) > 0;
 }

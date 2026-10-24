@@ -51,7 +51,26 @@ export async function updatePassword(
     const { userId, role } = requireIdentity(req);
 
     const updated = await userService.updatePassword(req.body, userId, role);
-    successResponse(res, 204, { message: "password updated successfully" });
+
+    successResponse(res, 200, { message: "password updated successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+//update user
+//update password
+export async function updateUser(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { userId, role } = requireIdentity(req);
+
+    const updated = await userService.updateUser(req.body, userId, role);
+
+    successResponse(res, 200, { message: "user details updated successfully" });
   } catch (error) {
     next(error);
   }

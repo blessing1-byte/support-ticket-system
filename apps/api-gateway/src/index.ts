@@ -18,8 +18,12 @@ config({ path: resolve(process.cwd(), ".env") });
 config({ path: resolve(process.cwd(), "../../.env") });
 
 const PORT = process.env.GATEWAY_PORT || 4000;
+
 const AUTH_SERVICE_URL =
   process.env.AUTH_SERVICE_URL || "http://localhost:4001";
+
+const TICKET_SERVICE_URL =
+  process.env.TICKET_SERVICE_URL || "http://localhost:4002";
 
 //rate limit
 const limiter = rateLimit({
@@ -42,6 +46,8 @@ app.get("/health", (_req, res) => {
 });
 
 //setUp proxy
+
+//auth service
 app.use(
   "/api/auth",
   gatewayAuth,
@@ -49,6 +55,17 @@ app.use(
     target: AUTH_SERVICE_URL,
     changeOrigin: true,
     pathRewrite: (path) => `/api/auth${path}`,
+  }),
+);
+
+//ticket service
+app.use(
+  "/api/ticket",
+  gatewayAuth,
+  createProxyMiddleware({
+    target: TICKET_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: (path) => `/api/ticket${path}`,
   }),
 );
 

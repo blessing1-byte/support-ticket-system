@@ -4,6 +4,7 @@ import {
   loginSchema,
   registerSchema,
   updatePasswordSchema,
+  updateUserSchema,
 } from "../schema/auth.schema";
 import * as authController from "../controllers/auth.controller";
 import { requireAdmin } from "../middleware/adminAuthorization";
@@ -30,10 +31,16 @@ authRouter.post(
   authController.createAgent,
 );
 
-authRouter.post(
-  "/me/update-password",
+authRouter.patch(
+  "/me/update",
   validateBody(updatePasswordSchema),
   authController.updatePassword,
+);
+
+authRouter.patch(
+  "/me/update",
+  validateBody(updateUserSchema),
+  authController.updateUser,
 );
 
 export default authRouter;
