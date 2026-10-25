@@ -9,7 +9,10 @@
     "db-migrate": "tsx scripts/db-migrate.ts",
     "dev:auth": "npm run dev -w auth-service",
     "dev:gateway": "npm run dev -w api-gateway",
-    "dev:tickets": "npm run dev -w tickets-service"
+    "dev:tickets": "npm run dev -w tickets-service",
+    "kafka:up": "docker compose -f docker/docker-compose.yml up -d ",
+    "kafka:down": "docker compose -f docker/docker-compose.yml down ",
+    "kafka:log": "docker compose -f docker/docker-compose.yml logs -f kafka "
   },
   "repository": {
     "type": "git",

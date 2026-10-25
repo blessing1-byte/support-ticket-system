@@ -22,7 +22,7 @@ export async function createTicket(input: TicketInput, userId: string) {
 
 //update ticket
 export async function updateTicket(
-  input: UpdateTicketInput,
+  input: Partial<TicketInput>,
   ticketId: string,
   userId: string,
   role: string,
@@ -44,10 +44,10 @@ export async function updateTicket(
   }
 
   const updatedTicket = await ticketRepo.updateTicket({
-    subject: input.subject,
-    description: input.description,
-    category: input.category,
-    priority: input.priority,
+    subject: input.subject ?? ticket.subject,
+    description: input.description ?? ticket.description,
+    category: input.category ?? ticket.category,
+    priority: input.priority ?? ticket.priority,
     ticketId,
   });
 
@@ -56,6 +56,8 @@ export async function updateTicket(
   }
 }
 
+//  api/ticket/:id/assign-agent/:id
+//   -- shows a lst of active agents
 //assign agent to a task
 //find task by id
 export async function assignAgent(
@@ -75,6 +77,9 @@ export async function assignAgent(
   if (agent.role !== "AGENT") {
     throw new AppError(400, "user is not an agent");
   }
+  if (agent.status !== "active") {
+    throw new AppError(400, "cannot assign a ticket to an inactive agent");
+  }
 
   if (role !== "ADMIN") {
     throw new AppError(
@@ -87,8 +92,63 @@ export async function assignAgent(
     throw new Error("failed to assign an agent to task");
   }
 }
-//  api/ticket/:id/assign-agent/:id
-//   -- shows a lst of active agents
+
+//unassign an agent from a task
+// ie deleting the field
+export async function unassignAgent(ticketId: string, role: string) {
+  const ticket = await ticketRepo.findTicketById(ticketId);
+  if (!ticket) {
+    throw new AppError(404, "ticket does not exist");
+  }
+  if (role !== "ADMIN") {
+    throw new AppError(
+      403,
+      "you do not have the permission to remove an agent",
+    );
+  }
+
+  const unassignedTicket = await ticketRepo.unassignAgent(ticketId);
+  if (!unassignedTicket) {
+    throw new Error("failed to unassign the agent from this ticket");
+  }
+}
+
+export async function reassignAgent(
+  ticketId: string,
+  agentId: string,
+  role: string,
+) {
+  const ticket = await ticketRepo.findTicketById(ticketId);
+
+  if (!ticket) {
+    throw new AppError(404, "task does not exist");
+  }
+
+  const agent = await ticketRepo.findAgentById(agentId);
+  if (!agent) {
+    throw new AppError(404, "Agent does not exists");
+  }
+  if (agent.role !== "AGENT") {
+    throw new AppError(400, "user is not an agent");
+  }
+  if (agent.status !== "active") {
+    throw new AppError(400, "cannot assign a ticket to an inactive agent");
+  }
+
+  if (role !== "ADMIN") {
+    throw new AppError(
+      403,
+      "you do not have the permission to assign an agent",
+    );
+  }
+  const reassignedTicket = await ticketRepo.reassignAgent(ticketId, agentId);
+  if (!reassignedTicket) {
+    throw new Error("failed to assign an agent to task");
+  }
+}
+
+//re assign an agent from a ticket
+//updating th field
 
 export async function listUserTickets(input: {
   id: string;

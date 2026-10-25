@@ -56,6 +56,45 @@ export async function assignAgent(
   }
 }
 
+export async function reassignAgent(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const ticketId = req.params.id as string;
+    const { role } = requireIdentity(req);
+    const { agentId } = req.body;
+    const reassignedAgent = await ticketService.reassignAgent(
+      ticketId,
+      agentId,
+      role,
+    );
+    return successResponse(res, 200, {
+      message: "agent reassigned successful",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function unassignAgent(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const ticketId = req.params.id as string;
+    const { role } = requireIdentity(req);
+    const unassignedAgent = await ticketService.unassignAgent(ticketId, role);
+    return successResponse(res, 204, {
+      message: "agent unassigned successful",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 //list tasks
 export async function listUserTickets(
   req: Request,

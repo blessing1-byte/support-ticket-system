@@ -1,5 +1,5 @@
 import { getPool } from "shared";
-import { Tickets } from "../types/types";
+import { TicketCategories, Tickets } from "../types/types";
 
 const pool = getPool();
 
@@ -133,4 +133,27 @@ export async function listTicketsByRole(input: {
   }
 }
 
-//note: return ticket list all for admin, assigned for agent and belongs to for user
+//unassign agent
+export async function unassignAgent(ticketId: string): Promise<Boolean> {
+  const result = await pool.query(
+    `DELETE assigned_agent_id from tickets WHERE id=$1`,
+    [ticketId],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
+//re assign an agent
+export async function reassignAgent(
+  ticketId: string,
+  agentId: string,
+): Promise<Boolean> {
+  const result = await pool.query(
+    `UPDATE tickets SET assigned_agent_id = $1, updated_at=NOW() WHERE id=$2`,
+    [agentId, ticketId],
+  );
+  return (result.rowCount ?? 0) > 0;
+}
+
+//do find ticket by id in service and controller
+//delete ticket by admin and customer
+//logout on service by invalidation of jwt token

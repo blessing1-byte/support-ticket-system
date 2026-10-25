@@ -1,6 +1,6 @@
 export type Priority = "LOW" | "MEDIUM" | "HIGH";
 export type Status = "OPEN" | "IN PROGRESS" | "RESOLVED" | "CLOSED";
-export type TicketCategories = ["account", "technical", "payment", "general"];
+export type TicketCategories = "account" | "technical" | "payment" | "general";
 
 export type Tickets = {
   id: string;
