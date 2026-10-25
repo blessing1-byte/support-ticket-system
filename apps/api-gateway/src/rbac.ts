@@ -36,6 +36,27 @@ const roleBasedRoutes: RbacRule[] = [
     path: "/api/ticket/create-ticket",
     role: ["CUSTOMER"],
   },
+
+  {
+    method: "PATCH",
+    path: "/api/ticket/:id/assign-agent",
+    role: ["ADMIN"],
+  },
+  {
+    method: "GET",
+    path: "/api/ticket/list-tickets",
+    role: ["CUSTOMER", "AGENT", "ADMIN"],
+  },
+  {
+    method: "PATCH",
+    path: "/api/ticket/:id/update-ticket",
+    role: ["CUSTOMER"],
+  },
+  {
+    method: "PATCH",
+    path: "/api/ticket/:id/update-ticket",
+    role: ["ADMIN", "AGENT"],
+  },
 ];
 
 //helper function

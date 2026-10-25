@@ -10,4 +10,12 @@ ticketRouter.post(
   ticketController.createTicket,
 );
 
+ticketRouter.patch("/:id/assign-agent", ticketController.assignAgent);
+
+ticketRouter.get("/list-tickets", ticketController.listUserTickets);
+
+ticketRouter.patch("/:id/update-ticket", ticketController.updateTicket);
+
+ticketRouter.patch("/:id/update-ticket", ticketController.updateTicketStatus);
+
 export default ticketRouter;
