@@ -10,6 +10,7 @@ import {
   verifyGatewaySecret,
 } from "shared";
 import ticketRouter from "./routes/tickets.routes";
+import { initKafka } from "./utils/kafka";
 
 dotenv.config({ path: resolve(process.cwd(), "../../../.env") });
 
@@ -31,6 +32,16 @@ app.use((_req, res, next) => {
 });
 
 app.use(errorHandler);
+
+async function startKafka() {
+  try {
+    //initialize producer
+    await initKafka();
+  } catch (error) {
+    logger.error({ error }, "kafka producer init failed");
+  }
+}
 app.listen(PORT, () => {
   logger.info(`ticket service is running on ${PORT}`);
 });
+startKafka();

@@ -29,3 +29,10 @@ export { verifyGatewaySecret } from "./auth/gatewaySecretAuth";
 
 //require Identity
 export { requireIdentity } from "./util/requireIdentity";
+
+//kafka
+export { createProducer } from "./kafka/producers";
+export { createConsumer } from "./kafka/consumer";
+
+export { TOPICS } from "./kafka/topics";
+export { publishJson, publishJsonSafe } from "./kafka/producers";

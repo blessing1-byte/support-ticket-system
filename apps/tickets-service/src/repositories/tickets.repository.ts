@@ -1,4 +1,4 @@
-import { getPool } from "shared";
+import { closePool, getPool, TOPICS } from "shared";
 import { TicketCategories, Tickets } from "../types/types";
 
 const pool = getPool();
@@ -11,20 +11,51 @@ export async function createTicket(input: {
   status: string;
   created_by: string;
 }): Promise<Tickets> {
-  const result = await pool.query(
-    `INSERT INTO tickets(subject, description, category, priority, status,created_by)
+  //acquire a single connection from the pool
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const ticketResult = await client.query(
+      `INSERT INTO tickets(subject, description, category, priority, status,created_by)
         VALUES($1,$2,$3,$4, $5,$6)
         RETURNING id, subject, description, category, priority, status,created_by, assigned_agent_id, assigned_at, created_at, updated_at`,
-    [
-      input.subject,
-      input.description,
-      input.category,
-      input.priority,
-      input.status,
-      input.created_by,
-    ],
-  );
-  return result.rows[0];
+      [
+        input.subject,
+        input.description,
+        input.category,
+        input.priority,
+        input.status,
+        input.created_by,
+      ],
+    );
+    const ticket = ticketResult.rows[0];
+
+    const payload = {
+      ticketId: ticket.id,
+      created_by: ticket.created_by,
+      message: "ticket created successfully",
+      subject: ticket.subject,
+    };
+
+    const outboxResult = await client.query(
+      `INSERT INTO outbox_events(topic, event_type, aggregate_id, payload)
+      VALUES($1,$2,$3,$4)
+      RETURNING id, topic, event_type, aggregate_id, payload, created_at, published_at`,
+      [
+        TOPICS.TICKET_EVENTS,
+        "ticket.created",
+        ticket.id,
+        JSON.stringify(payload),
+      ],
+    );
+    await client.query("COMMIT");
+    return ticket;
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }
 
 //update ticket
