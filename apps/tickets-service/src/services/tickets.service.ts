@@ -2,7 +2,7 @@ import { TicketInput, UpdateTicketInput } from "../schema/tickets.schema";
 import * as ticketRepo from "../repositories/tickets.repository";
 import { convertToPublicTickets } from "../utils/tickets.utils";
 import { AppError } from "shared";
-import { publishTicketEvent } from "../utils/kafka";
+import { publishEvent } from "../utils/kafka";
 
 export async function createTicket(input: TicketInput, userId: string) {
   const ticket = await ticketRepo.createTicket({
@@ -18,7 +18,7 @@ export async function createTicket(input: TicketInput, userId: string) {
     throw new Error("failed to create ticket");
   }
 
-  await publishTicketEvent();
+  // await publishEvent();
 
   return convertToPublicTickets(ticket);
 }

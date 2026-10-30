@@ -10,7 +10,7 @@ import {
   verifyGatewaySecret,
 } from "shared";
 import ticketRouter from "./routes/tickets.routes";
-import { initKafka } from "./utils/kafka";
+import { initKafka, pollOutbox } from "./utils/kafka";
 
 dotenv.config({ path: resolve(process.cwd(), "../../../.env") });
 
@@ -37,6 +37,8 @@ async function startKafka() {
   try {
     //initialize producer
     await initKafka();
+
+    await pollOutbox();
   } catch (error) {
     logger.error({ error }, "kafka producer init failed");
   }
